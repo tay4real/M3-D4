@@ -109,9 +109,9 @@
 
       <div class="row">
         <!-- List -->
-        <div class="col-12 mb-5 col-md-9 offset-md-3 mainPage">
+        <div class="col-12 col-md-8">
           <div class="row">
-            <div class="col-10">
+            <div class="col">
               <div id="allbooks" class="d-none">
                 <h2>All Books</h2>
                 <div
@@ -122,8 +122,22 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-10">
+            <div class="col">
               <div id="cartList" class="d-none">
+                <h2>Cart List</h2>
+                <div
+                  class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 imgLinks py-3"
+                  id="cartListSection"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <div class="row">
+            <div class="col">
+              <div id="cartList" class="">
                 <h2>Cart List</h2>
                 <div
                   class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 imgLinks py-3"
@@ -157,56 +171,64 @@
     -->
 
     <script>
-      const displayItemList = (books) => {
+      const item = (books) => {
         return `
-                <div class="card mb-3" style="max-width: 540px">
-                  <div class="row no-gutters">
-                    <div class="col-md-4">
+                <div class="card mb-3 my-3" >
+                  <div class="row no-gutters  ">
                       <img src=${books.img} class="card-img" alt="" />
-                    </div>
-                    <div class="col-md-8">
                       <div class="card-body">
-                        <h5 class="card-title">${books.title}</h5>
-                        <p class="card-text">Category: {books.category}</p>
+                        <h6 class="card-title">${books.title}</h6>
+                        <p class="card-text">Category: ${books.category}</p>
                         <p class="card-text">
                           <small class="text-muted">
                             Price: ${books.price}
                           </small>
                         </p>
                         <div class="row">
+                            <div  class="col-8">
                           ${createButton(
                             "Add to Cart",
                             "addcart",
                             "btn-primary"
                           )}
-                          ${createButton("Skip", "remove_item", "btn-danger")}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>;
-          `;
+                          </div>
+                          <div  class="col-4">${createButton(
+                            "Skip",
+                            "remove_item",
+                            "btn-danger"
+                          )}</div></div>
 
-        const createButton = (button_name, id, btn_color) => {
-          return `<div  class="col">
+                      </div>
+
+                  </div>
+                </div>
+        `;
+      };
+      const createButton = (button_name, id, btn_color) => {
+        return `
                             <button id=${id} type="button" class="btn ${btn_color}">
                               ${button_name}
                             </button>
-                          </div>`;
-        };
+                      `;
+      };
 
+      let addToCart = document.getElementById("addcart");
+      addToCart.addEventListener("click", () => {});
+
+      window.onload = function () {
         const products = fetch("https://striveschool-api.herokuapp.com/books")
           .then((response) => {
             return response.json();
           })
           .then((books) => {
-            return books;
+            let container = document.getElementById("allbooks");
+            container.classList.remove("d-none");
+            let allBookList = document.getElementById("allBooksSection");
+            allBookList.innerHTML = "";
+            books.map((book) => {
+              allBookList.innerHTML += item(book);
+            });
           });
-
-        console.log(products);
-        window.onload = function () {
-          alert("MESSAGE");
-        };
       };
     </script>
   </body>
